@@ -17,36 +17,30 @@ public class EmployeeController
     @Autowired
     private EmployeeService employeeService;
 
-    //@PostMapping("employee")
     @PostMapping
     public ResponseEntity<Employee>createEmployee(@RequestBody Employee employee)
     {
        return employeeService.createEmployee(employee);
     }
-//    @GetMapping("employee")
-//    public  ResponseEntity<Employee> getEmployeeByEmployeeId(@PathVariable("employeeId") String employeeId)
-//    {
-//       return employeeService.getEmployeeById(employeeId);
-//    }
-//
-//    @GetMapping("employee")
-//    public ResponseEntity<List<Employee>> getAllEmployees()
-//    {
-//        return employeeService.getAllEmployee();
-//    }
 
-    //@PutMapping("employee")
+    @GetMapping
+    public ResponseEntity<?> getEmployees(@RequestParam(required = false) String employeeId)
+    {
+        return  employeeService.getEmployees(employeeId);
+    }
+
     @PutMapping
     public  ResponseEntity<Employee> updateEmployee(@RequestParam("employeeId") String employeeId,@RequestBody Employee employee)
     {
         return  employeeService.updateEmployee(employeeId,employee);
     }
-    //@DeleteMapping("employee")
+
     @DeleteMapping
     public  ResponseEntity<HttpStatus> deleteEmployee(@RequestParam("employeeId") String employeeId)
     {
         return employeeService.deleteEmployeeById(employeeId);
     }
+
 
     //TO Do
     /*
@@ -57,13 +51,7 @@ public class EmployeeController
   coordinnate
   name
 every day new collection and in it every user has a document
-    * */
-
-    //@GetMapping("/emp")
-    @GetMapping
-    public ResponseEntity<?> getEmployees(@RequestParam(required = false) String employeeId)
-    {
-        return  employeeService.getEmployees(employeeId);
-    }
+Attendance DB -> month wise collection -> day wise document -> array wise attendance entry
+    */
 
 }

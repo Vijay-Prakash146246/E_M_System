@@ -28,28 +28,22 @@ public class EmployeeService
         }
     }
 
-    public ResponseEntity<Employee> getEmployeeById(String employeeId)
+    public ResponseEntity<?> getEmployees(String employeeId)
     {
-        Optional<Employee> employeeData=employeeRepository.findById(employeeId);
-        return employeeData.map(employee -> new ResponseEntity<>(employee, HttpStatus.FOUND))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (employeeId != null) {
+            Optional<Employee> employeeData = employeeRepository.findById(employeeId);
+            return employeeData.map(employee -> new ResponseEntity<>(employee, HttpStatus.FOUND))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } else {
+            List<Employee> allEmployees = employeeRepository.findAll();
+            if (!allEmployees.isEmpty()) {
+                return new ResponseEntity<>(allEmployees, HttpStatus.OK);
+            } else {
+                return ResponseEntity.noContent().build();
+            }
+        }
     }
 
-    public ResponseEntity<List<Employee>> getAllEmployee()
-    {
-        try
-        {
-            List<Employee> employees=employeeRepository.findAll();
-            if (employees.isEmpty())
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            return new ResponseEntity<>(employees,HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            return  new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
 
     public ResponseEntity<Employee> updateEmployee(String employeeId, Employee employee)
     {
@@ -88,19 +82,4 @@ public class EmployeeService
         }
     }
 
-    public ResponseEntity<?> getEmployees(String employeeId)
-    {
-        if (employeeId != null) {
-            Optional<Employee> employeeData = employeeRepository.findById(employeeId);
-            return employeeData.map(employee -> new ResponseEntity<>(employee, HttpStatus.FOUND))
-                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        } else {
-            List<Employee> allEmployees = employeeRepository.findAll();
-            if (!allEmployees.isEmpty()) {
-                return new ResponseEntity<>(allEmployees, HttpStatus.OK);
-            } else {
-                return ResponseEntity.noContent().build(); // No employees found
-            }
-        }
-    }
 }
